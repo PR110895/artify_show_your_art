@@ -212,7 +212,6 @@ function handleAddFaviroteContainarClick(data) {
 }
 
 favButtons.addEventListener("click", () => {
-  console.log("first button click");
   homeContainar.style.display = "none";
   favContainar.style.display = "block";
   getRenderFavirotePhotos();
@@ -220,7 +219,7 @@ favButtons.addEventListener("click", () => {
 
 function getRenderFavirotePhotos() {
   const faviroteContainar = document.querySelector("#favirote");
-  const array = localStorage.getItem("arrayOfPhotos");
+  const array = localStorage.getItem("arrayOfPhotos") || [];
   const favArrayList = JSON.parse(array);
   showSpinner();
 
@@ -242,7 +241,7 @@ function getRenderFavirotePhotos() {
   });
 
   {
-    favArrayList.length
+    favArrayList?.length
       ? (faviroteContainar.innerHTML = getUrls.join(""))
       : (faviroteContainar.innerHTML = `<div id='noData'><h1> OOPS! No Data found...</h1></div>`);
   }
