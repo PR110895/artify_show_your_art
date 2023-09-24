@@ -35,53 +35,8 @@ This app is use to showcase your Art-work.
 
 ---
 
-> [Working Demo] (added soon)
+> [Working Demo] (https://coruscating-duckanoo-f6f8c9.netlify.app)
 
-\*\* Function for add photos to favourite
-
-```js
-function handleAddFaviroteContainarClick(data) {
-  showSpinner();
-  const arrays = localStorage.getItem("arrayOfPhotos");
-  if (!arrays) {
-    const faviroteObj = photosArray.find((photo) => photo.id === data);
-    const faviroteArray = [];
-    faviroteArray.push(faviroteObj);
-    localStorage.setItem("arrayOfPhotos", JSON.stringify(faviroteArray));
-    showToast();
-    hideSpinner();
-  } else {
-    const favArray = JSON.parse(arrays);
-    const faviroteObj = photosArray.find((photo) => photo.id === data);
-    const alreadyAddedCheck = isObjectInArray(favArray, faviroteObj);
-    if (!alreadyAddedCheck) {
-      favArray.push(faviroteObj);
-      localStorage.setItem("arrayOfPhotos", JSON.stringify(favArray));
-      showToast();
-    } else {
-      showToast("Alredy exist in favirote");
-    }
-    hideSpinner();
-  }
-}
-```
-
-\*\* Function for remove photos to favourite
-
-```js
-function handleRemoveItemContainarClick(data) {
-  showSpinner();
-  const arrays = localStorage.getItem("arrayOfPhotos");
-  const favArray = JSON.parse(arrays);
-  if (favArray) {
-    const faviroteArray = favArray.filter((item) => item.id !== data);
-    localStorage.setItem("arrayOfPhotos", JSON.stringify(faviroteArray));
-    showToast();
-    getRenderFavirotePhotos();
-    hideSpinner();
-  }
-}
-```
 
 \*\* Function for show and remove spinner
 
