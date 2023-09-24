@@ -52,6 +52,7 @@ function getPhotos(page) {
   if (!query) {
     query = "Modern Art";
     localStorage.setItem("query", "Modern Art");
+    localStorage.setItem("arrayOfPhotos", JSON.stringify([]));
   }
   // get call unsplash
   unsplash.search
@@ -220,6 +221,7 @@ favButtons.addEventListener("click", () => {
 function getRenderFavirotePhotos() {
   const faviroteContainar = document.querySelector("#favirote");
   const array = localStorage.getItem("arrayOfPhotos") || [];
+  console.log(array);
   const favArrayList = JSON.parse(array);
   showSpinner();
 
