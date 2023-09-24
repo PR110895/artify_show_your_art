@@ -17,13 +17,6 @@ body {
   );
 }
 
-#homeContainar{
-  display: block;
-}
-
-#favouriteContainar{
-  display: none;
-}
 
 #main {
   display: grid;
