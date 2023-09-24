@@ -43,6 +43,8 @@ let photosArray = [];
 
 // function for getPhotos from unsplash
 function getPhotos(page) {
+  homeContainar.style.display = "block";
+  favContainar.style.display = "none";
   showSpinner();
   // set counter
   counterValue = page;
