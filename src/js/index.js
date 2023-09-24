@@ -1,11 +1,14 @@
 import { createApi } from "unsplash-js";
 
+const homeContainar = document.querySelector("#homeContainar");
+const favContainar = document.querySelector("#favouriteContainar");
 const mainContainar = document.querySelector("#main");
 const pageIgnationContainar = document.querySelector("#pageIgnation");
 const preButton = document.querySelector("#prev");
 const nextButton = document.querySelector("#next");
 const currentPage = document.querySelector("#current-page-no");
 const buttons = document.querySelectorAll(".my-button");
+const favButtons = document.querySelector("#favButton");
 const input = document.querySelector("input");
 const unsplash = createApi({
   accessKey: "4XdpT0pUfK1pFsaMFJeiPphqKglxbf4UcNCMw1GbUhM",
@@ -21,7 +24,7 @@ function hideSpinner() {
   spinner.style.display = "none";
 }
 
-function showToast(message = "This photo has been added to favirote!.") {
+function showToast(message) {
   const toast = document.createElement("div");
   toast.classList.add("toast");
   toast.innerText = message;
@@ -189,7 +192,7 @@ function handleAddFaviroteContainarClick(data) {
     const faviroteArray = [];
     faviroteArray.push(faviroteObj);
     localStorage.setItem("arrayOfPhotos", JSON.stringify(faviroteArray));
-    showToast();
+    showToast("This photo has been added to favirote!.");
     hideSpinner();
   } else {
     const favArray = JSON.parse(arrays);
@@ -198,7 +201,7 @@ function handleAddFaviroteContainarClick(data) {
     if (!alreadyAddedCheck) {
       favArray.push(faviroteObj);
       localStorage.setItem("arrayOfPhotos", JSON.stringify(favArray));
-      showToast();
+      showToast("This photo has been added to favirote!.");
       hideSpinner();
     } else {
       showToast("Alredy exist in favirote");
@@ -206,4 +209,72 @@ function handleAddFaviroteContainarClick(data) {
     }
     hideSpinner();
   }
+}
+
+favButtons.addEventListener("click", () => {
+  console.log("first button click");
+  homeContainar.style.display = "none";
+  favContainar.style.display = "block";
+  getRenderFavirotePhotos();
+});
+
+function getRenderFavirotePhotos() {
+  const faviroteContainar = document.querySelector("#favirote");
+  const array = localStorage.getItem("arrayOfPhotos");
+  const favArrayList = JSON.parse(array);
+  showSpinner();
+
+  const getUrls = favArrayList?.map((photo, i) => {
+    const description =
+      photo.description !== null ? photo.description : "Description";
+    return `<div id=${photo.id} class='image-containar' key=${i}>
+  <img class='image' src=${photo.urls.small} alt=${photo.urls.small}/>
+  <div class='image-details'>
+  <p class="heading">${description.toUpperCase().substring(0, 25) + "..."}</p>
+  <p class='description'>${photo.alt_description.substring(0, 50) + "..."}</p>
+  <div class='user'><p class='time'>Publish At:- ${new Date(
+    photo.created_at
+  ).toLocaleString("en-US")}</p>
+  <p class='time'>Author:- ${photo.user.name}</p>
+  </div>
+  </div>
+  </div>`;
+  });
+
+  {
+    favArrayList.length
+      ? (faviroteContainar.innerHTML = getUrls.join(""))
+      : (faviroteContainar.innerHTML = `<div id='noData'><h1> OOPS! No Data found...</h1></div>`);
+  }
+  hideSpinner();
+  const backButtons = document.querySelector("#back-button");
+  backButtons.addEventListener("click", backButtonFunction);
+  const imageContainars = document.querySelectorAll(".image-containar");
+  imageContainars.forEach((imageContainar) => {
+    imageContainar.addEventListener("click", () =>
+      handleRemoveItemContainarClick(imageContainar.id)
+    );
+  });
+}
+
+// handle for remove from favirote
+function handleRemoveItemContainarClick(data) {
+  showSpinner();
+  const arrays = localStorage.getItem("arrayOfPhotos");
+  const favArray = JSON.parse(arrays);
+  if (favArray) {
+    const faviroteArray = favArray.filter((item) => item.id !== data);
+    localStorage.setItem("arrayOfPhotos", JSON.stringify(faviroteArray));
+    showToast("This photo has been removed from favirote!.");
+    getRenderFavirotePhotos();
+    hideSpinner();
+  }
+  hideSpinner();
+}
+
+// handle for back button
+function backButtonFunction() {
+  homeContainar.style.display = "block";
+  favContainar.style.display = "none";
+  getPhotos(1);
 }
